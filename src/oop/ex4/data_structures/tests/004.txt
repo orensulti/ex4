@@ -1,0 +1,24 @@
+# simple add test of an existing value
+
+add 81 true
+add 62 true
+add 57 true
+add 77 true
+add 96 true
+print
+add 56 true
+print
+add 99 true
+print
+add 23 true
+print
+add 79 true
+print
+add 32 true
+print
+add 53 true
+print
+add 15 true
+print
+add 18 true
+add 26 true

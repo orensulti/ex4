@@ -1,0 +1,180 @@
+orens
+
+
+=============================
+=      File description     =
+=============================
+1. AvlTree - 
+This class represents AvlTree with all of his methods (delete, insert, contains and more)
+I used nested class design: The AVLTree is the outer class and Node is the inner class.
+* This class implements Iterable<Integer> 
+
+2. README - this file
+
+============================================
+=          Theoretical Questions           =
+============================================
+
+1. Analyzing the AVL tree
+
+Find a series of 12 numbers, such that when they are inserted into an empty AVL tree
+one-by-one, the result will be a tree of height 4 (insertions only, no deletions):
+8,5,10,3,6,9,11,2,4,7,12,1
+
+
+
+5.2. The complexity of constructing an AVL tree 
+
+1. The asymptotic running time complexity of the tree construction done in AvlTree(int[]data) is: O(nlogn)
+
+In order to construct an AVL from array of ints we should call each time 
+the add method. let’s assume the worst case which the add method call rebalance
+and every time rebalance call to rotations - in each insertion we violate the AVL property
+of less than 2 difference in the heights of left and right subtrees.
+
+Of course, the cost of balancing the tree is an O(1) operation, so I do not consider that in the complexity analysis.
+
+So we have:
+
+log(1) + log(2) + log(3) + ... + log(n) < n*log(n) = log(n) + log(n) + ... + log(n)
+
+Therefore O(nlogn).
+ 
+2.Bonus: What is the best possible running time complexity for a specific case?
+
+As we learned in Dast : sorting algorithm that is based on comparisons is O(nlogn).
+When we construct Avl tree from ints array we can print in order the tree O(n)
+and the result is sorted as we learned.
+Lets assume in negative construct the Avl is lower than O(logn) So we have sort algorithm which is lower than
+O(nlogn) + O(n) = O(nlogn) and this is a contradiction to “Sorting complexity block”
+
+So O(nlogn) is the best possible running time complexity
+
+
+
+
+
+
+5.3. The complexity of copying an AVL tree
+1. What is the asymptotic running time complexity of the tree construction done in AvlTree(AvlTree avlTree)? O(nlogn)
+
+I traversed each node of the tree and call add method n times.
+as I explained:
+
+log(1) + log(2) + log(3) + ... + log(n) < n*log(n) = log(n) + log(n) + ... + log(n)
+
+Therefore O(nlogn).
+
+2. the best asymptotic running time is O(n) because we must visit at least one time in
+each node of the AVL Tree in order to copy this node. So better than O(n)
+is not possible.
+
+We can do so by implementing a new helper method which will copy the 
+val to a new one by traversing all of the nodes in recursion and copy 
+the node to a new node in the new avl.
+
+So yes it is more efficient than my, but you did not ask for a specific run time
+and my code is more simple because I do not have to create another method
+and I used an exist method add for doing so.
+
+
+5.4. The complexity of calculating the minimal number of nodes in an
+AVL tree of a given height
+
+1. What is the asymptotic running time complexity of your implementation of the operation
+done in findMinNodes(int h): O(1) - 
+I used a closed formula for calculating it. I used Math.pow which is considered
+O(1) so my formula is O(1), I could implement it by recursion but it will be O(2^n)
+Because it will be like fibonacci recursion, therefore I used this closed formula.
+I read about it in the Internet and saw the proof of this formula by ״Slanting the matrix״
+
+2. Is that the best possible asymptotic running time complexity? If not, what is the best
+achievable complexity?
+It is the best asymptotic running time because it is O(1) and there is no better 
+asymptotic running time.
+
+
+
+
+======================================
+=	Implementation details	     =
+======================================
+
+1. Classes:
+
+I choose to implement nested class for AvlTree such that the inner class is Node.
+I could create another class for Node, but I preferred to do it as nested class.
+It is more convenient that when you define something you use it in the same place
+as we learned in OOP.
+
+In addition , binding these two classes together help us achieve encapsulation.
+The inner class safe from outside interference and misuse.
+The outer class data members can be declared private and the inner class
+because it is a nested class, can access them, so we can save the data members
+of the outer class from misuse of other classes and still can access them
+from inner class.
+
+In addition I used composition: avl tree has an val Node.
+Avl is a BST and Bst is a tree which have nodes and particularly a root node.
+So it makes sense to define as data member of Avl tree a root node to work with.
+
+
+How I used this class and what is the interaction to AvlTree outer class?
+The Node class represents a Node in Avl Tree 
+(I saved his key, left, right, parent and balance), 
+I used the Node class several times in my AvlTree class’s methods.
+For example when I want to add a new key into the AvlTree I create a node with this key.
+And every time I wanted to access the node’s children and parent for Rotation purpose and
+so on.
+
+
+2. Implementation of add method:
+
+In the add method we should add a new node 
+with given key in the right place in the AVL.
+AVL is a BST, so the add method is like the 
+add method of BST we learned in Dast Course. 
+if the key we want to add is lower 
+than the current node key we will go to the left subtree, else to the right subtree, till we dove to the leaf level the innermost level.
+then create Node by Node constructor with key as value.
+in this process flow if we found a node with the given key we will exit and return false 
+because we do not want to insert duplicate value into the tree.
+
+When we finish the process of insertion of a new node with given key to the tree, 
+as I said like in BST, we will call rebalance method which will take care of
+violations if there are. 
+because addition of new node may change the balance so there is a difference >=2 in the heights of right and left subtrees, We should call this method
+that will use rotations to save the tree to be AVL .
+
+Did it in one method without using help methods.
+If the value is already in the tree I return false.
+Else, I’m adding the node with given key increase the size by one and return true
+
+Implementation of delete method:
+
+In the delete method we should delete a node with given key.
+first we should find the node we want to delete, 
+we will do it by using the property of
+AVL tree - left subtree will give us smaller values than node X, 
+and right subtree will give us bigger values.
+
+So, while there is a child we will continue to dive in the tree.
+When we finish if we found the node with the key.
+
+Now, we should notice that the node we want to delete may has child.
+if left child we will cause the parent of the node to 
+points to the left child of the node, by doing so the node is 
+eliminated from the tree… same case on right child.
+if no child so just delete the node.
+
+In the end call rebalance because deletion of a node can 
+causes to violation. 
+so, rebalance method call rotations if we should do so.
+
+
+I implemented deleteNode method which is an helper method : 
+execute the deletion and return true is succeeded otherwise, false.
+In the delete method I call the help method and 
+if returned true I decrease the size and return true - 
+succeeded to delete the node.
+else just return false.
